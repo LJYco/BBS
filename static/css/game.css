@@ -1,0 +1,68 @@
+.gameDiv{
+    width: 800px;
+    height: 400px;
+    margin: 40px auto;
+    background:url('/static/img/birds.png')  no-repeat 0 0;
+    position:relative;
+    overflow: hidden;
+}
+.line_top{
+    width:100%;
+    height:1px;
+    border:1px solid #000;
+    position:absolute;
+    top:0;
+    right: 100%;
+    transition: all 2s ease-in-out;
+}
+.line_left{
+    width:1px;
+    height:100%;
+    border:1px solid #000;
+    position:absolute;
+    top:100%;
+    left:0;
+    transition: all 2s ease-in-out;
+}
+.line_right{
+    width:1px;
+    height:100%;
+    border:1px solid #000;
+    position:absolute;
+    bottom:100%;
+    right:0;
+    transition: all 2s ease-in-out;
+}
+.line_bottom{
+    width:100%;
+    height:1px;
+    border:1px solid #000;
+    position:absolute;
+    bottom:0;
+    left:100%;
+    transition: all 2s ease-in-out;
+}
+.top_transform{
+    transform: translateX(100%);
+}
+.left_transform{
+    transform: translateY(-100%);
+}
+.right_transform{
+    transform: translateY(100%);
+}
+.bottom_transform{
+    transform: translateX(-100%);
+}
+
+.gameDiv a{
+    display:block;
+    margin:190px;
+    width:480px;
+    height:50px;
+    font-size:60px;
+    color:#fff;
+}
+.bird_style{
+    padding-left: 275px;
+}

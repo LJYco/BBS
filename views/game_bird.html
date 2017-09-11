@@ -1,0 +1,29 @@
+{% extends "./layout/layout.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<script src="/static/js/common/util.js"></script>
+    <script src="/static/js/common/observer.js"></script>
+    <script src="/static/js/common/text.js"></script>
+    <script src="/static/js/common/button.js"></script>
+    <script src="/static/js/roles/bird.js"></script>
+    <script src="/static/js/roles/sky.js"></script>
+    <script src="/static/js/roles/land.js"></script>
+    <script src="/static/js/roles/pipe.js"></script>
+    <script src="/static/js/roles/timer.js"></script>
+    <script src="/static/js/scene/bgBase64_2.js"></script>
+    <script src="/static/js/scene/loadingScene.js"></script>
+    <script src="/static/js/scene/gameScene.js"></script>
+    <script src="/static/js/scene/overScene.js"></script>
+    <script src="/static/js/flappyBird.js"></script>
+    <div id="game" class="bird_style"></div>
+    <script>
+        var game = getFlappyBird( '#game' );
+        game.start();
+    </script>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

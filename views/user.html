@@ -1,0 +1,71 @@
+{% extends "./layout/user.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<div class="aw-register-box" style="width: 400px;margin: 40px auto;">
+  <div class="mod-head">
+    <a href=""></a>
+    <h1>用户信息修改</h1>
+  </div>
+  <div class="mod-body">
+    <form class="aw-register-form" action="/account/register" method="post" id="register_form">
+      <ul>
+        <li class="alert alert-danger hide error_message text-left">
+          <i class="icon icon-delete"></i> <em></em>
+        </li>
+        <li>
+          <input class="aw-register-name form-control" type="text" name="username"   placeholder="用户名" id="username">
+        </li>
+        <br>
+        <li>
+          <input class="aw-register-email form-control" type="text" placeholder="邮箱" name="email" id="email" >
+        </li>
+        <br>
+        <li>
+          <input class="aw-register-pwd form-control" type="password" name="password" placeholder="密码" id="password">
+        </li>
+        <br>
+        <li class="more-information" id="information">
+          <ul>
+            <li>
+              性别:
+              <label>
+                <input name="sex"  value="1" type="radio"> 男 </label>&nbsp;
+              <label>
+                <input name="sex"  value="2" type="radio"> 女 </label>&nbsp;
+              <label>
+                <input name="sex"  value="3" type="radio" checked="checked"> 保密 </label>
+            </li>
+            <br>
+            <li>
+              <input type="text" class="form-control" placeholder="一句话介绍" id="welcome_signature"  name="signature">
+            </li>
+          </ul>
+        </li>
+        <br>
+        <li>
+          <input class="aw-register-pwd form-control" type="text" name="qq" placeholder="QQ" id="password">
+        </li>
+        <br>
+        <li>
+          <input class="aw-register-pwd form-control" type="text" name="phone" placeholder="phone" id="phone">
+        </li>
+      </ul>
+    </form>
+    <br>
+    <a href="javascript:;" class="btn btn-large btn-primary" id="btn">确认修改信息</a>
+    <a href="/" class="pull-right btn btn-large btn-primary">返回</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    $('#btn').on('click',function () {
+      window.alert('恭喜，修改成功')
+      window.location.href = '/'  //坑，跳转到主页，并且要显示刚刚注册的用户
+    })
+  </script>
+{% endblock %}

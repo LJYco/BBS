@@ -1,0 +1,33 @@
+{% extends "./layout/layout.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+  <div class="gameDiv" id="game_bird">
+    <div class="line_top"></div>
+    <div class="line_right"></div>
+    <div class="line_bottom"></div>
+    <div class="line_left"></div>
+    <a href="/game/bird" id="begin_game">点击此处开始游戏</a>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    $('#game_bird').on('mouseover',function () {
+        $('.line_top').toggleClass('top_transform');
+        $('.line_right').toggleClass('right_transform');
+        $('.line_bottom').toggleClass('bottom_transform');
+        $('.line_left').toggleClass('left_transform');
+        $('#begin_game').fadeIn(400);
+    })
+    $('#game_bird').on('mouseout',function () {
+       $('.line_top').toggleClass('top_transform');
+        $('.line_right').toggleClass('right_transform');
+        $('.line_bottom').toggleClass('bottom_transform');
+        $('.line_left').toggleClass('left_transform');
+        $('#begin_game').fadeOut(400);
+    })
+</script>
+{% endblock %}

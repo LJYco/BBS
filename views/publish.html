@@ -1,0 +1,83 @@
+{% extends "./layout/layout.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="../node_modules/mdeditor/editor.css">
+{% endblock %}
+
+{% block body %}
+<div class="aw-container-wrap">
+  <div class="container aw-publish aw-publish-article">
+    <div class="row">
+      <div class="aw-content-wrap clearfix">
+        <div class="col-sm-12 col-md-9 aw-main-content">
+          <!-- tab 切换 -->
+          <ul class="nav nav-tabs aw-nav-tabs active">
+            <li><a href="javascript:;">问题</a></li>
+            <h2 class="hidden-xs"><i class="icon icon-ask"></i> 发起</h2>
+          </ul>
+          <!-- end tab 切换 -->
+          <form action="/article/publish" method="post" id="article_form">
+            <div class="aw-mod aw-mod-publish">
+              <div class="mod-body">
+                <h3>文章标题:</h3>
+                <!-- 文章标题 -->
+                <div class="aw-publish-title active">
+                  <input type="text" name="title" id="title" class="form-control">
+                </div>
+                <!-- end 文章标题 -->
+                <h3>文章内容:</h3>
+                <div class="aw-mod aw-editor-box">
+                  <div class="mod-head">
+                    <div class="wmd-panel">
+                      <div id="wmd-button-bar">
+                      </div>
+                      <textarea class="wmd-input form-control autosize" id="wmd-input" rows="15" name="message">hello world</textarea>
+                    </div>
+                  </div>
+              </div>
+              <div class="mod-footer clearfix">
+                <span class="aw-anonymity">
+                                  </span>
+                                  <input type="submit" class="btn btn-large btn-success btn-publish-submit" value="确认发起">
+
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="../node_modules/mdeditor/src/editor.js"></script>
+<script src="../node_modules/marked/lib/marked.js"></script>
+<script>
+  ;(function () {
+    var editor = new Editor({
+      element: document.querySelector('#wmd-input')
+    });
+    editor.render();
+    $('#article_form').on('submit', function (e) {
+      e.preventDefault()
+      $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: {
+          'title': $('#title').val().trim(),
+          content: editor.codemirror.getValue(),
+          arr:{a:[1,2,3]}
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.status === 'OK') {
+            window.location.href = data.result.redirect_url
+          }
+        }
+      })
+    })
+  })()
+</script>
+{% endblock %}

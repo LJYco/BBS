@@ -1,0 +1,206 @@
+{% extends "./layout/layout.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+<div class="aw-container-wrap">
+  <div class="container">
+    <div class="row">
+      <div class="aw-content-wrap clearfix" id="canvasHeight">
+        <div class="col-sm-12 col-md-9 aw-main-content aw-article-content">
+          <div class="aw-mod aw-topic-bar" id="question_topic_editor" data-type="article" data-id="337">
+            <div class="tag-bar clearfix">
+              <span class="topic-tag">
+                <a class="text" href="javascript:;" data-id="1159">问题</a>
+              </span>
+            </div>
+          </div>
+          <div class="aw-mod aw-question-detail">
+            <div class="mod-head">
+              <h1>{{ article.title }}</h1>
+            </div>
+            <div class="mod-body">
+              <div class="content markitup-box">
+              {{ article.content | safe }}
+              </div>
+              <div class="meta clearfix">
+                <div class="aw-article-vote pull-left disabled">
+                  <a href="javascript:;" class="agree" id='zan'><i class="icon icon-agree"></i> <b id="zan_text">0</b></a>
+                </div>
+                <span class="pull-right  more-operate">
+                  {% if isCurrentUser %}
+                  <a class="text-color-999" href="javascript:;"><i class="icon icon-edit"></i> 编辑</a>
+                  {% endif %}
+
+                  <a class="text-color-999 dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon icon-share"></i> 分享                  </a>
+                </span>
+              </div>
+            </div>
+            <div class="mod-footer">
+            </div>
+          </div>
+          <!-- 文章评论 -->
+          <div class="aw-mod">
+            <div class="mod-head common-head">
+              <h2>评论</h2>
+            </div>
+            <div class="mod-body aw-feed-list">
+            </div>
+          </div>
+          <!-- end 文章评论 -->
+          <!-- 回复编辑器 -->
+          <div class="aw-mod aw-article-replay-box">
+            <form action="/comment/create/{{article._id}}" " method="post" id="answer_form">
+              <input type="hidden" id="article_id" value="{{article._id}}">
+              <div class="mod-body">
+                <textarea rows="3" name="message" id="comment_editor" class="form-control autosize" placeholder="写下你的评论..." style="overflow: hidden; word-wrap: break-word; resize: none; height: 74px;"></textarea>
+              </div>
+              <div class="mod-footer clearfix">
+                <input type="submit" name="" class="btn btn-normal btn-success pull-right btn-submit" value="回复">
+              </div>
+            </form>
+          </div>
+          <!-- end 回复编辑器 -->
+        </div>
+        <!-- 侧边栏 -->
+        <div class="col-sm-12 col-md-3 aw-side-bar hidden-sm hidden-xs">
+            <canvas id="canvas" style="background:#111" ></canvas>
+        </div>
+        <!-- end 侧边栏 -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/template" id="tpl">
+  <% comments.forEach(function(comment){ %>
+          <div class="aw-item">
+                <a class="aw-user-name" href="javascript:;">
+                  <img src="/static/img/avatar-max-img.png" alt="peng">
+                </a>
+                <div class="content">
+                  <p>
+                    <a href="javascript"></a> </p>
+                  <div class="markitup-box">
+                    <%= comment.message %> </div>
+                </div>
+              </div>
+              <br>
+  <% }) %>
+</script>
+<script src="/node_modules/underscore/underscore.js"></script>
+<script>
+  var tplStr =$('#tpl').html();
+  loadComment()
+  function loadComment() {
+    $.ajax({
+    url:'/comment/list/'+$('#article_id').val().trim(),
+    type:'get',
+    dataType:'json',
+    success:function (data) {
+     var htmlStr =_.template(tplStr)({
+        comments:data.result.comments
+      });
+      $('.aw-feed-list').html(htmlStr)
+    }
+  })
+  }
+  $('#answer_form').on('submit',function (e) {
+    e.preventDefault();
+    $.ajax({
+      url:$(this).attr('action'),
+      type:$(this).attr('method'),
+      data:$(this).serialize(),
+      dataType:'json',
+      success:function (data) {
+        if(data.status ==='OK'){
+          loadComment();
+          $('#comment_editor').val('')
+        }
+      }
+    })
+  })
+</script>
+<script type="text/javascript">
+
+    window.onload = function(){
+      //获取画布对象
+      var canvas = document.getElementById("canvas");
+      //获取画布的上下文
+      var context =canvas.getContext("2d");
+      //获取浏览器屏幕的宽度和高度
+      var H = $('#canvasHeight').height();
+      //设置canvas的宽度和高度
+      canvas.width = 200;
+      canvas.height = H;
+      //每个文字的字体大小
+      var fontSize = 12;
+      //计算列
+      var colunms = Math.floor(200 /fontSize);
+      //记录每列文字的y轴坐标
+      var drops = [];
+      //给每一个文字初始化一个起始点的位置
+      for(var i=0;i<colunms;i++){
+        drops.push(0);
+      }
+
+      //运动的文字
+      var str ="Q & a community of inner Mongolia university of science and technology";
+      //4:fillText(str,x,y);原理就是去更改y的坐标位置
+      //绘画的函数
+      function draw(){
+        context.fillStyle = "rgba(0,0,0,0.05)";
+        context.fillRect(0,0,200,H);
+        //给字体设置样式
+        context.font = "700 "+fontSize+"px  微软雅黑";
+        //给字体添加颜色
+        context.fillStyle ="#00cc33";//可以rgb,hsl, 标准色，十六进制颜色
+        //写入画布中
+        for(var i=0;i<colunms;i++){
+          var index = Math.floor(Math.random() * str.length);
+          var x = i*fontSize;
+          var y = drops[i] *fontSize;
+          context.fillText(str[index],x,y);
+          //如果要改变时间，肯定就是改变每次他的起点
+          if(y >= canvas.height && Math.random() > 0.99){
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      };
+
+      function randColor(){
+        var r = Math.floor(Math.random() * 256);
+        var g = Math.floor(Math.random() * 256);
+        var b = Math.floor(Math.random() * 256);
+        return "rgb("+r+","+g+","+b+")";
+      }
+
+      draw();
+      setInterval(draw,30);
+    };
+
+</script>
+<script type="text/javascript">
+  var zan_flag = true;
+  $('#zan').click(function () {
+    if(zan_flag){
+      var num = $('#zan_text').html();
+      num = parseInt(num) + 1;
+      $('#zan_text').html(num);
+       $('#zan').addClass('zan_text');
+       zan_flag = false;
+    }else{
+      var num = $('#zan_text').html();
+      num = parseInt(num) - 1;
+      $('#zan_text').html(num);
+       $('#zan').removeClass('zan_text');
+       zan_flag = true;
+    }
+  });
+</script>
+{% endblock %}
